@@ -38,7 +38,7 @@ def upload():
 		
 		# perform the search
 		searcher = Searcher("./storage/index.csv")
-		results = searcher.search(features, limit=5)
+		results = searcher.search(features, limit=20)
 		os.remove(filePath)
 		
 	return render_template('index.html', results = results)
@@ -52,7 +52,7 @@ def similar(imageID):
 	
 	# perform the search
 	searcher = Searcher("./storage/index.csv")
-	results = searcher.search(features, limit=5)
+	results = searcher.search(features, limit=20)
 	return render_template('index.html', results = results)
 
 @app.route('/assets/<path:path>')
