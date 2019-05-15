@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from colorsearch.colordescriptor import ColorDescriptor
 from colorsearch.searcher import Searcher
 from neuralnetwork.matcher import match, getFeatures
+from objectdetection.matcher import match as objectMatching
 import os, cv2
 
 app = Flask(__name__)
@@ -41,7 +42,10 @@ def upload():
 		results = searcher.search(features, limit=20)
 		"""
 		""" **** VGG 16 SEARCH ****  """
+		"""
 		results = match(filePath, vgg16Features, vgg16Paths)
+		"""
+		results = objectMatching(os.path.join(os.getcwd(), filePath))
 		return render_template('index.html', results = results, imgQuery=filename)
 	return render_template('index.html')
 

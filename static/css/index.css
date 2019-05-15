@@ -10,8 +10,8 @@
   }
   @media (min-width: 768px) {
 	.jumbotron {
-	  padding-top: calc(var(--jumbotron-padding-y) * 1);
-	  padding-bottom: calc(var(--jumbotron-padding-y) * 1);
+	  padding-top: calc(var(--jumbotron-padding-y) * 2.5);
+	  padding-bottom: calc(var(--jumbotron-padding-y) * 2.5);
 	}
   }
   
@@ -20,7 +20,9 @@
   }
   
   .jumbotron-heading {
-	font-weight: 300;
+    font-weight: 700;
+    text-shadow: 1px 0px 30px rgba(0, 0, 0, 1);
+    color: white;
   }
   
   .jumbotron .container {
