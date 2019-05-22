@@ -1,11 +1,13 @@
-from flask import Flask, request, render_template, send_from_directory, flash, redirect, url_for
+from flask import Flask, request, render_template, send_from_directory, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from colorsearch.colordescriptor import ColorDescriptor
 from colorsearch.searcher import Searcher
 from neuralnetwork.matcher import match, getFeatures
 from objectdetection.matcher import match as objectMatching
+from tester import Tester
 import os, cv2
 
+tester = Tester()
 app = Flask(__name__)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -42,10 +44,10 @@ def upload():
 		results = searcher.search(features, limit=20)
 		"""
 		""" **** VGG 16 SEARCH ****  """
-		"""
 		results = match(filePath, vgg16Features, vgg16Paths)
 		"""
 		results = objectMatching(os.path.join(os.getcwd(), filePath))
+		"""
 		return render_template('index.html', results = results, imgQuery=filename)
 	return render_template('index.html')
 
@@ -72,6 +74,10 @@ def sendImg(path):
 @app.route('/query/<path:path>')
 def sendImgQuery(path):
     return send_from_directory("queries",path)
+
+@app.route('/test')
+def test():
+    return jsonify(tester.testVGG())
 
 if __name__ == '__main__':
     app.run(debug=True)
