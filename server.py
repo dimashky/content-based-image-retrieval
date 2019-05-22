@@ -77,7 +77,7 @@ def sendImgQuery(path):
 
 @app.route('/test')
 def test():
-    return jsonify(tester.testVGG())
+    return jsonify(tester.testing("color"))
 
 if __name__ == '__main__':
     app.run(debug=True)

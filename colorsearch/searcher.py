@@ -20,7 +20,7 @@ class Searcher:
 				# chi-squared distance between the features in our index
 				# and our query features
 				features = [float(x) for x in row[1:]]
-				d = self.chi2_distance(features, queryFeatures)
+				d = self.distance(features, queryFeatures)
  
 				# now that we have the distance between the two feature
 				# vectors, we can udpate the results dictionary -- the
@@ -43,6 +43,12 @@ class Searcher:
 		# compute the chi-squared distance
 		d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
 			for (a, b) in zip(histA, histB)])
+ 
+		# return the chi-squared distance
+		return d
+
+	def distance(self, histA, histB, eps = 1e-10):
+		d = np.sum([abs(a-b) for (a,b) in zip(histA, histB)])
  
 		# return the chi-squared distance
 		return d

@@ -5,13 +5,14 @@ with open('./storage/index.json') as json_file:
 	indexTable = json.load(json_file)
 	indexTableKeys = indexTable.keys()
 
-def match(imagePath):
+def match(imagePath, prediction = None):
 	model_path = os.path.join( os.path.expanduser("~"), ".keras","models")
 	prediction = ImagePrediction()
 	prediction.setModelTypeAsResNet()
 	prediction.setModelPath(os.path.join(model_path, "resnet50_weights_tf_dim_ordering_tf_kernels.h5"))
 	prediction.loadModel()
-	print(imagePath)
+	
+	print("Matching " + imagePath)
 	predictions, probabilities = prediction.predictImage(imagePath, result_count=20)
 	results = {}
 	for eachPrediction, eachProbability in zip(predictions, probabilities):
