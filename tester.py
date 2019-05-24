@@ -25,6 +25,7 @@ class Tester:
 		queries = glob.glob(query_path + "/*.jpg")
 		discretise_recalls = [(0,0), (0,0), (0,0), (0,0), (0,0), (0,0), (0,0), (0,0), (0,0), (0,0), (0,0)]
 		APs = []
+		cd = ColorDescriptor((8, 12, 3))
 		for query_path in queries:
 			query_name = path.splitext(path.basename(query_path))[0]
 			print("Testing: " + query_name)
@@ -36,7 +37,6 @@ class Tester:
 				results = vggMatch(query_path, self.vgg16Features, self.vgg16Paths, limit=13000)
 			elif (test_type == "color"):
 				try:
-					cd = ColorDescriptor((8, 12, 3))
 					features = cd.describe(cv2.imread(query_path))
 					results = self.searcher.search(features, limit=13000)
 				except Exception as e:
@@ -45,7 +45,6 @@ class Tester:
 			elif (test_type == "objects"):
 				results = objectMatching(os.path.join(os.getcwd(), query_path), self.prediction)
 			results = [res[1].replace("./dataset\\", "") for res in results]
-			print(results)
 			PR = []
 			current_relevance = 0
 			for idx, res_path in enumerate(results):
@@ -57,7 +56,6 @@ class Tester:
 				if recall == 1:
 					break
 				discretise_recall = self.discretiseRecall(PR)
-				print(discretise_recall)
 				for i in range(len(discretise_recall)):
 					discretise_recalls[i] = (discretise_recalls[i][0]+ discretise_recall[i], discretise_recalls[i][1] + 1)
 				AP = sum(discretise_recall) / (len(discretise_recall) + 0.000001)

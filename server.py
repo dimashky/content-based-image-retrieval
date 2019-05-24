@@ -33,21 +33,23 @@ def upload():
 			print('No selected file or not supported extension')
 			return redirect(request.url)
 
+		query_type = "vgg"
+		if("query_type" in request.form.keys()):
+			query_type = request.form["query_type"]
 		filename = secure_filename(file.filename)
 		filePath = os.path.join("queries", filename)
 		file.save(filePath)
-		""" **** COLOR SEARCH **** 
-		cd = ColorDescriptor((8, 12, 3))
-		query = cv2.imread(filePath)
-		features = cd.describe(query)
-		searcher = Searcher("./storage/index.csv")
-		results = searcher.search(features, limit=20)
-		"""
-		""" **** VGG 16 SEARCH ****  """
-		results = match(filePath, vgg16Features, vgg16Paths)
-		"""
-		results = objectMatching(os.path.join(os.getcwd(), filePath))
-		"""
+		
+		if(query_type == "color"):
+			cd = ColorDescriptor((8, 12, 3))
+			query = cv2.imread(filePath)
+			features = cd.describe(query)
+			searcher = Searcher("./storage/index.csv")
+			results = searcher.search(features, limit=20)
+		elif (query_type == "objects"):
+			results = objectMatching(os.path.join(os.getcwd(), filePath))
+		else:
+			results = match(filePath, vgg16Features, vgg16Paths)
 		return render_template('index.html', results = results, imgQuery=filename)
 	return render_template('index.html')
 
@@ -77,7 +79,7 @@ def sendImgQuery(path):
 
 @app.route('/test')
 def test():
-    return jsonify(tester.testing("color"))
+    return jsonify(tester.testing("objects"))
 
 if __name__ == '__main__':
     app.run(debug=True)
